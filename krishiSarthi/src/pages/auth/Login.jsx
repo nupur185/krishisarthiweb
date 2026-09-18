@@ -9,6 +9,7 @@ function Login() {
   const [password, setPassword] = useState("")
 
   const handleLogin = () => {
+    e.preventDefault()
     if (!role || !emailOrMobile.trim() || !password.trim()) {
       return
     }
