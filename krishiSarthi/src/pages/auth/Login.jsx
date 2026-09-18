@@ -96,7 +96,7 @@ function Login() {
 
         {/* Login */}
         <button
-          onClick={handleLogin}
+  type="submit"
           className="w-full rounded-lg bg-[#174d35] py-3 font-medium text-white transition hover:bg-[#123c2a]"
         >
           Login
