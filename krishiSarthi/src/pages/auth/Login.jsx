@@ -1,0 +1,111 @@
+import { useState } from "react"
+import { useNavigate } from "react-router"
+
+function Login() {
+  const navigate = useNavigate()
+
+  const [role, setRole] = useState("Farmer")
+  const [emailOrMobile, setEmailOrMobile] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleLogin = () => {
+    if (!role || !emailOrMobile.trim() || !password.trim()) {
+      return
+    }
+
+    navigate("/farmer/home")
+  }
+
+  return (
+    <div className="min-h-screen bg-[#f7f4ea] flex items-center justify-center px-4">
+      <form
+  onSubmit={handleLogin}
+  className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm border border-[#d5ddd3]"
+>
+
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-[#174d35]">
+            KrishiSarthi
+          </h1>
+
+          <p className="mt-2 text-sm text-[#6b776f]">
+            Smart Procurement Ecosystem
+          </p>
+        </div>
+
+        {/* Heading */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-[#183328]">
+            Welcome Back
+          </h2>
+
+          <p className="mt-1 text-sm text-[#6b776f]">
+            Login to continue
+          </p>
+        </div>
+
+        {/* Role */}
+        <div className="mb-5">
+          <label className="mb-2 block text-sm font-medium text-[#183328]">
+            Login as
+          </label>
+
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full rounded-lg border border-[#d5ddd3] bg-white px-4 py-3 outline-none focus:border-[#174d35]"
+          >
+            <option>Farmer</option>
+            <option>Procurement Officer</option>
+            <option>Government Officer</option>
+          </select>
+        </div>
+
+        {/* Email */}
+        <div className="mb-5">
+          <label className="mb-2 block text-sm font-medium text-[#183328]">
+            Email / Mobile Number
+          </label>
+
+          <input
+            type="text"
+            value={emailOrMobile}
+            onChange={(e) => setEmailOrMobile(e.target.value)}
+            required
+            placeholder="Enter email or mobile number"
+            className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none focus:border-[#174d35]"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="mb-6">
+          <label className="mb-2 block text-sm font-medium text-[#183328]">
+            Password
+          </label>
+
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="Enter password"
+            className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none focus:border-[#174d35]"
+          />
+        </div>
+
+        {/* Login */}
+        <button
+          onClick={handleLogin}
+          className="w-full rounded-lg bg-[#174d35] py-3 font-medium text-white transition hover:bg-[#123c2a]"
+        >
+          Login
+        </button>
+
+      
+    </form>
+    </div>
+  )
+}
+
+export default Login
