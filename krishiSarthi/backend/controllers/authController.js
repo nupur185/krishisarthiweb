@@ -9,6 +9,7 @@ export const register = async (req, res) => {
       mobile,
       email,
       password,
+      
     } = req.body
 
     if (!fullName || !mobile || !email || !password) {

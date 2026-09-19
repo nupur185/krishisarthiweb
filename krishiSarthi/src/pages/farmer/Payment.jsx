@@ -36,32 +36,43 @@ const paymentData = {
   bankRef: "SBIN12345678",
   centerName: "PACS Centre 042, Karnal",
   timeline: [
-    {
-      id: 1,
-      title: "Processing",
-      date: "12 Sep 2026, 2:00 PM",
-      status: "completed",
-      amount: "rs 20,000",
-      description: "Land, quality testing, and weighing records verified.",
-    },
-    {
-      id: 2,
-      title: "Initiating",
-      subtitle: "Ref. TXN454632",
-      date: "14 Sep 2026, 10:15 PM",
-      status: "completed",
-      amount: "20,000",
-      description: "Sanction approved by DSO. Forwarded to PFMS for DBT credit.",
-    },
-    {
-      id: 3,
-      title: "Credited to bank account",
-      date: "23 Sep 2026, 9:42 AM",
-      status: "completed",
-      amount: "20,000",
-      description: "Direct Benefit Transfer credited to State Bank of India account ending *5678.",
-    },
-  ],
+  {
+    id: 1,
+    title: "Payment Maker",
+    status: "completed",
+    description: "Payment details prepared",
+  },
+  {
+    id: 2,
+    title: "Payment Checker",
+    status: "completed",
+    description: "Payment verified and approved",
+  },
+  {
+    id: 3,
+    title: "Disbursement Bank Clearance",
+    status: "completed",
+    description: "Payment sent for bank-side processing",
+  },
+  {
+    id: 4,
+    title: "Cheque Handover",
+    status: "completed",
+    description: "Payment advice/instrument handed over",
+  },
+  {
+    id: 5,
+    title: "Initiate Payment",
+    status: "completed",
+    description: "Payment is being transferred to your bank",
+  },
+  {
+    id: 6,
+    title: "Fully Disbursed",
+    status: "completed",
+    description: "Money credited to your account",
+  },
+],
   qualityDetails: {
     crop: "Paddy (Grade A)",
     moistureContent: "13.2%",
@@ -199,39 +210,40 @@ export default function PaymentAndUpdates() {
             {/* Timeline & Actions Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
               {/* Vertical Timeline Panel */}
-              <div className="lg:col-span-6 bg-white rounded-2xl p-6 shadow-sm border border-gray-200/80">
-                <h3 className="text-base font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#14532D]"></span>
-                  Payment Processing Timeline
-                </h3>
+              {/* Vertical Timeline Panel */}
+<div className="lg:col-span-6 bg-white rounded-2xl p-6 shadow-sm border border-gray-200/80">
+  <h3 className="text-base font-bold text-gray-900 mb-6 flex items-center gap-2">
+    <span className="h-2 w-2 rounded-full bg-[#14532D]"></span>
+    Payment Processing Timeline
+  </h3>
 
-                <div className="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-emerald-200">
-                  {paymentData.timeline.map((item) => (
-                    <div key={item.id} className="relative">
-                      <div className="absolute -left-6 top-0.5 h-5 w-5 rounded-full bg-[#14532D] border-4 border-white shadow-xs flex items-center justify-center"></div>
+  <div className="relative pl-8">
+    {/* Vertical line */}
+    <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-emerald-200"></div>
 
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-sm font-bold text-gray-900">
-                            {item.title}
-                          </h4>
-                          <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
-                            {item.date}
-                          </span>
-                        </div>
-                        {item.subtitle && (
-                          <p className="text-xs font-mono font-semibold text-emerald-800 mt-0.5">
-                            {item.subtitle}
-                          </p>
-                        )}
-                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+    <div className="space-y-7">
+      {paymentData.timeline.map((item) => (
+        <div key={item.id} className="relative">
+          {/* Step Circle */}
+          <div className="absolute -left-8 top-0.5 h-6 w-6 rounded-full bg-[#14532D] border-4 border-white shadow-sm flex items-center justify-center">
+            <CheckCircle2 size={12} className="text-white" />
+          </div>
+
+          {/* Step Content */}
+          <div>
+            <h4 className="text-sm font-bold text-gray-900">
+              {item.title}
+            </h4>
+
+            <p className="mt-1 text-xs text-gray-500 leading-relaxed">
+              {item.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
 
 
             </div>
@@ -286,29 +298,39 @@ export default function PaymentAndUpdates() {
           </div>
 
           {/* 3. Vertical Payment Timeline */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200/80">
-            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
-              Payment Timeline
-            </h4>
-            <div className="relative pl-5 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-emerald-200">
-              {paymentData.timeline.map((item) => (
-                <div key={item.id} className="relative">
-                  <div className="absolute -left-5 top-1 h-4 w-4 rounded-full bg-[#14532D] border-2 border-white shadow-xs"></div>
-                  <div>
-                    <h5 className="text-sm font-bold text-gray-900 leading-tight">
-                      {item.title}
-                    </h5>
-                    {item.subtitle && (
-                      <p className="text-xs font-mono font-semibold text-emerald-800">
-                        {item.subtitle}
-                      </p>
-                    )}
-                    <p className="text-[11px] text-gray-500 mt-0.5">{item.date}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* 3. Vertical Payment Timeline */}
+<div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200/80">
+  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5">
+    Payment Timeline
+  </h4>
+
+  <div className="relative pl-7">
+    {/* Vertical line */}
+    <div className="absolute left-[9px] top-2 bottom-2 w-0.5 bg-emerald-200"></div>
+
+    <div className="space-y-6">
+      {paymentData.timeline.map((item) => (
+        <div key={item.id} className="relative">
+          {/* Step Circle */}
+          <div className="absolute -left-7 top-0 h-5 w-5 rounded-full bg-[#14532D] border-2 border-white shadow-sm flex items-center justify-center">
+            <CheckCircle2 size={10} className="text-white" />
           </div>
+
+          {/* Step Content */}
+          <div>
+            <h5 className="text-sm font-bold text-gray-900 leading-tight">
+              {item.title}
+            </h5>
+
+            <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+              {item.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
 
           {/* 4. Light-Green Payment Summary Card */}
           <div className="bg-[#E8F5E9] rounded-2xl p-4 border border-emerald-200 shadow-xs space-y-3">

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import { Link } from "react-router"
+import { api } from "../../api/api"
 
 function Login() {
   const navigate = useNavigate()
@@ -8,7 +9,6 @@ function Login() {
   const [role, setRole] = useState("Farmer")
   const [emailOrMobile, setEmailOrMobile] = useState("")
   const [password, setPassword] = useState("")
-
 const handleLogin = async (e) => {
   e.preventDefault()
 
@@ -17,32 +17,16 @@ const handleLogin = async (e) => {
   }
 
   try {
-    const response = await fetch(
-      "http://localhost:5000/api/auth/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          emailOrMobile: emailOrMobile.trim(),
-          password,
-          role,
-        }),
-      }
-    )
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      alert(data.message)
-      return
-    }
+    const data = await api("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({
+        emailOrMobile: emailOrMobile.trim(),
+        password,
+        role,
+      }),
+    })
 
     console.log("Login successful:", data)
-
-    // Store JWT temporarily
-    localStorage.setItem("token", data.token)
 
     // Navigate according to role
     if (role === "Farmer") {
@@ -55,7 +39,7 @@ const handleLogin = async (e) => {
 
   } catch (error) {
     console.error("Login error:", error)
-    alert("Unable to connect to server")
+    alert(error.message)
   }
 }
 

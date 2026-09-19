@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router"
+import { api } from "../../api/api"
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -23,42 +24,29 @@ function Register() {
     }))
   }
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault()
 
   try {
-    const response = await fetch(
-      "http://localhost:5000/api/auth/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          mobile: formData.mobile,
-          email: formData.email,
-          password: formData.password,
-        }),
-      }
-    )
-
-    const data = await response.json()
-
-    if (!response.ok) {
-      alert(data.message)
-      return
-    }
+    const data = await api("/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        fullName: formData.fullName,
+        mobile: formData.mobile,
+        email: formData.email,
+        password: formData.password,
+      }),
+    })
 
     alert("Registration successful!")
-
     console.log("Registered user:", data.user)
 
   } catch (error) {
     console.error("Registration error:", error)
-    alert("Unable to connect to server")
+    alert(error.message)
   }
 }
+
 
   return (
     <div className="min-h-screen bg-[#f7f4ea] px-4 py-8">
