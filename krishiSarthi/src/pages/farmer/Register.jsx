@@ -5,11 +5,13 @@ function Register() {
   const [formData, setFormData] = useState({
     fullName: "",
     mobile: "",
-    farmerId: "",
+    aadhar: "",
     village: "",
     district: "",
     state: "Bihar",
     crop: "",
+    email: "",
+    password: "",
   })
 
   const handleChange = (e) => {
@@ -87,30 +89,28 @@ function Register() {
                 value={formData.mobile}
                 onChange={handleChange}
                 placeholder="Enter mobile number"
-                required
                 className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none transition focus:border-[#174d35]"
               />
             </div>
 
             {/* Farmer ID */}
-            <div>
+            {/* <div>
               <label className="mb-2 block text-sm font-medium text-[#183328]">
-                Farmer ID / Aadhaar
+                Aadhaar
               </label>
 
               <input
                 type="text"
-                name="farmerId"
-                value={formData.farmerId}
+                name="aadhar"
+                value={formData.aadhar}
                 onChange={handleChange}
                 placeholder="Enter Farmer ID"
-                required
                 className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none transition focus:border-[#174d35]"
               />
-            </div>
+            </div> */}
 
             {/* Village */}
-            <div>
+            {/* <div>
               <label className="mb-2 block text-sm font-medium text-[#183328]">
                 Village / Locality
               </label>
@@ -121,13 +121,12 @@ function Register() {
                 value={formData.village}
                 onChange={handleChange}
                 placeholder="Enter village or locality"
-                required
                 className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none transition focus:border-[#174d35]"
               />
-            </div>
+            </div> */}
 
             {/* District + State */}
-            <div className="grid gap-5 sm:grid-cols-2">
+            {/* <div className="grid gap-5 sm:grid-cols-2">
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-[#183328]">
@@ -138,7 +137,6 @@ function Register() {
                   name="district"
                   value={formData.district}
                   onChange={handleChange}
-                  required
                   className="w-full rounded-lg border border-[#d5ddd3] bg-white px-4 py-3 outline-none focus:border-[#174d35]"
                 >
                   <option value="">Select district</option>
@@ -163,10 +161,10 @@ function Register() {
                 />
               </div>
 
-            </div>
+            </div> */}
 
             {/* Crop */}
-            <div>
+            {/* <div>
               <label className="mb-2 block text-sm font-medium text-[#183328]">
                 Primary Crop
               </label>
@@ -175,7 +173,6 @@ function Register() {
                 name="crop"
                 value={formData.crop}
                 onChange={handleChange}
-                required
                 className="w-full rounded-lg border border-[#d5ddd3] bg-white px-4 py-3 outline-none focus:border-[#174d35]"
               >
                 <option value="">Select crop</option>
@@ -185,7 +182,46 @@ function Register() {
                 <option>Maize</option>
                 <option>Barley</option>
               </select>
+            </div> */}
+
+
+
+                        {/* Email Id */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-[#183328]">
+                Email Id
+              </label>
+
+              <input
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="farmer@gmail.com"
+                required
+                className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none transition focus:border-[#174d35]"
+              />
             </div>
+
+
+                        {/* Password */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-[#183328]">
+                Password
+              </label>
+
+              <input
+                type="text"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter Strong Password"
+                required
+                className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none transition focus:border-[#174d35]"
+              />
+            </div>
+
+
 
             {/* Submit */}
             <button

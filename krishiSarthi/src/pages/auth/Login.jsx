@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
+import { Link } from "react-router"
 
 function Login() {
   const navigate = useNavigate()
@@ -110,8 +111,21 @@ function Login() {
           Login
         </button>
 
+
+        <p className="mt-6 text-center text-sm text-[#6b776f]">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="font-semibold text-[#174d35] hover:underline"
+            >
+              Register
+            </Link>
+          </p>
+
       
     </form>
+
+
     </div>
   )
 }
