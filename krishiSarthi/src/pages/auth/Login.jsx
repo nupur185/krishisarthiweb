@@ -133,7 +133,7 @@ const handleLogin = async (e) => {
         <p className="mt-6 text-center text-sm text-[#6b776f]">
             Don't have an account?{" "}
             <Link
-              to="/register"
+              to="/farmer/register"
               className="font-semibold text-[#174d35] hover:underline"
             >
               Register
