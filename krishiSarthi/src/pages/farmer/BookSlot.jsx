@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import { Link } from "react-router"
 import {
   MapPin,
   Clock3,
@@ -8,6 +9,7 @@ import {
   Route,
   Users,
   ArrowRight,
+  ArrowLeft
 } from "lucide-react"
 
 const centres = [
@@ -76,16 +78,27 @@ function BookSlot() {
 
       {/* Header */}
       <header className="border-b border-[#d5ddd3] bg-white">
-        <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6">
-          <h1 className="text-xl font-bold text-[#174d35]">
-            KrishiSarthi
-          </h1>
+  <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-4 sm:px-6">
 
-          <p className="text-xs text-[#6b776f]">
-            Smart Procurement
-          </p>
-        </div>
-      </header>
+    <Link
+      to="/farmer/home"
+      className="rounded-lg p-2 text-[#174d35] hover:bg-[#eff8ed]"
+    >
+      <ArrowLeft size={20} />
+    </Link>
+
+    <div>
+      <h1 className="text-xl font-bold text-[#174d35]">
+        KrishiSarthi
+      </h1>
+
+      <p className="text-xs text-[#6b776f]">
+        Smart Procurement
+      </p>
+    </div>
+
+  </div>
+</header>
 
       <main className="mx-auto max-w-5xl px-4 py-6 pb-28 sm:px-6">
 

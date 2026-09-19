@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router"
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -129,6 +130,12 @@ export default function PaymentAndUpdates() {
         <div className="flex-1 flex flex-col min-w-0">
           {/* Top Bar */}
           <header className="h-16 bg-white border-b border-gray-200 px-8 flex items-center justify-between shadow-xs">
+            <Link
+            to="/farmer/home"
+            className="rounded-lg p-2 text-[#174d35] hover:bg-[#eff8ed]"
+          >
+            <ArrowLeft size={20} />
+          </Link>
             <h2 className="text-lg font-bold text-[#14532D] flex items-center gap-2">
               <CreditCard size={20} className="text-[#14532D]" />
               Payment & Procurement Updates

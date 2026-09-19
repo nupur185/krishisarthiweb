@@ -9,13 +9,20 @@ function Login() {
   const [password, setPassword] = useState("")
 
   const handleLogin = (e) => {
-    e.preventDefault()
-    if (!role || !emailOrMobile.trim() || !password.trim()) {
-      return
-    }
+  e.preventDefault()
 
-    navigate("/farmer/home")
+  if (!role || !emailOrMobile.trim() || !password.trim()) {
+    return
   }
+
+  if (role === "Farmer") {
+    navigate("/farmer/home")
+  } else if (role === "Procurement Officer") {
+    navigate("/officer/procurement")
+  } else if (role === "Government Officer") {
+    navigate("/government/dashboard")
+  }
+}
 
   return (
     <div className="min-h-screen bg-[#f7f4ea] flex items-center justify-center px-4">

@@ -244,31 +244,7 @@ function Token() {
 
   <div className="grid gap-4 sm:grid-cols-2">
 
-    <div className="rounded-xl bg-white p-4">
-      <div className="flex items-center gap-2 text-[#174d35]">
-        <Timer size={18} />
-        <p className="text-xs font-semibold">
-          Estimated Waiting Time
-        </p>
-      </div>
 
-      <p className="mt-2 text-lg font-bold text-[#183328]">
-        15–25 min
-      </p>
-    </div>
-
-    <div className="rounded-xl bg-white p-4">
-      <div className="flex items-center gap-2 text-[#174d35]">
-        <Scale size={18} />
-        <p className="text-xs font-semibold">
-          Procurement Quantity
-        </p>
-      </div>
-
-      <p className="mt-2 text-lg font-bold text-[#183328]">
-        25 quintals
-      </p>
-    </div>
 
     <div className="rounded-xl bg-white p-4">
       <div className="flex items-center gap-2 text-[#174d35]">
