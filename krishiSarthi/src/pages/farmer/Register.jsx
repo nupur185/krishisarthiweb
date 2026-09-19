@@ -23,11 +23,42 @@ function Register() {
     }))
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+  e.preventDefault()
 
-    console.log("Registration Data:", formData)
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          mobile: formData.mobile,
+          email: formData.email,
+          password: formData.password,
+        }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message)
+      return
+    }
+
+    alert("Registration successful!")
+
+    console.log("Registered user:", data.user)
+
+  } catch (error) {
+    console.error("Registration error:", error)
+    alert("Unable to connect to server")
   }
+}
 
   return (
     <div className="min-h-screen bg-[#f7f4ea] px-4 py-8">
