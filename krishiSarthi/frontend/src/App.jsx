@@ -23,6 +23,7 @@ import FarmersOverview from "./pages/government/FarmersOverview"
 import PaymentsOverview from "./pages/government/PaymentsOverview"
 import Analytics from "./pages/government/Analytics"
 import Alerts from "./pages/government/Alerts"
+import Landing from "./pages/Landing"
 
 function App() {
   return (
@@ -54,10 +55,12 @@ function App() {
         <Route path="/government/analytics" element={<Analytics />} />
         <Route path="/government/alerts" element={<Alerts />} />
 
-        <Route
+        {/* <Route
           path="/"
-          element={<Navigate to="/login" replace />}
-        />
+          element={<Navigate to="/register" replace />}
+        /> */}
+
+        <Route path="/" element={<Landing />} />
 
       </Routes>
     </BrowserRouter>
