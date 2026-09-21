@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router"
+import { useAuth } from "../../context/AuthContext"
 import {
   CalendarDays,
   Ticket,
@@ -16,6 +17,7 @@ import {
 
 function FarmerHome() {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   return (
     <div className="min-h-screen bg-[#f7f4ea]">
@@ -64,7 +66,7 @@ function FarmerHome() {
           </p>
 
           <h2 className="mt-1 text-2xl font-bold text-[#183328] sm:text-3xl">
-            Hello, Ramesh Kumar 👋
+            Hello, {user?.fullName || "Farmer"} 👋
           </h2>
 
           <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#ddefd9] px-3 py-1.5 text-xs font-semibold text-[#174d35]">

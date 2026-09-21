@@ -140,9 +140,18 @@ export const login = async (req, res) => {
       }
     )
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite:
+        process.env.NODE_ENV === "production"
+          ? "none"
+          : "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    })
+
     return res.status(200).json({
       message: "Login successful",
-      token,
       user: {
         id: user.id,
         fullName: user.full_name,
@@ -159,4 +168,64 @@ export const login = async (req, res) => {
       message: "Internal server error",
     })
   }
+}
+
+
+
+
+export const getMe = async (req, res) => {
+  try {
+    const userId = req.user.userId
+
+    const result = await pool.query(
+      `
+      SELECT id, full_name, email, mobile, role
+      FROM users
+      WHERE id = $1
+      `,
+      [userId]
+    )
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: "User not found",
+      })
+    }
+
+    const user = result.rows[0]
+
+    return res.status(200).json({
+      user: {
+        id: user.id,
+        fullName: user.full_name,
+        email: user.email,
+        mobile: user.mobile,
+        role: user.role,
+      },
+    })
+
+  } catch (error) {
+    console.error("Get user error:", error)
+
+    return res.status(500).json({
+      message: "Internal server error",
+    })
+  }
+}
+
+
+// LOGOUT
+export const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+      process.env.NODE_ENV === "production"
+        ? "none"
+        : "lax",
+  })
+
+  return res.status(200).json({
+    message: "Logged out successfully",
+  })
 }

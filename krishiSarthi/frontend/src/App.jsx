@@ -24,9 +24,11 @@ import PaymentsOverview from "./pages/government/PaymentsOverview"
 import Analytics from "./pages/government/Analytics"
 import Alerts from "./pages/government/Alerts"
 import Landing from "./pages/Landing"
+import { AuthProvider } from "./context/AuthContext"
 
 function App() {
   return (
+    <AuthProvider>
     <BrowserRouter>
       <Routes>
 
@@ -64,6 +66,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   )
 }
 

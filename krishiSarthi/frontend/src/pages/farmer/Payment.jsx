@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router"
+import { useAuth } from "../../context/AuthContext"
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -25,9 +26,21 @@ import {
 } from "lucide-react";
 import { toast, Toaster } from "sonner";
 
+
 // Standalone Mock Data
+
+export default function PaymentAndUpdates() {
+  const { user } = useAuth()
+  const [activeModal, setActiveModal] = useState(null); // 'quality' | 'weight' | 'feedback' | 'grievance'
+  const [rating, setRating] = useState(0);
+  const [feedbackText, setFeedbackText] = useState("");
+  const [grievanceCategory, setGrievanceCategory] = useState("Payment Delay");
+  const [grievanceText, setGrievanceText] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+
 const paymentData = {
-  farmerName: "Ramesh Kumar",
+  farmerName: user?.fullName || "Farmer",
   farmerId: "F013456",
   status: "Credited",
   amount: "₹18,560",
@@ -90,14 +103,6 @@ timeline: [
     operator: "S. Singh",
   },
 };
-
-export default function PaymentAndUpdates() {
-  const [activeModal, setActiveModal] = useState(null); // 'quality' | 'weight' | 'feedback' | 'grievance'
-  const [rating, setRating] = useState(0);
-  const [feedbackText, setFeedbackText] = useState("");
-  const [grievanceCategory, setGrievanceCategory] = useState("Payment Delay");
-  const [grievanceText, setGrievanceText] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const closeModal = () => setActiveModal(null);
 

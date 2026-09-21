@@ -1,4 +1,5 @@
 import { Link } from "react-router"
+import { useAuth } from "../../context/AuthContext"
 import { QRCodeCanvas } from "qrcode.react"
 import {
   ArrowLeft,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react"
 
 function Token() {
+  const { user } = useAuth()
   return (
     <div className="min-h-screen bg-[#f7f4ea]">
 
@@ -197,7 +199,7 @@ function Token() {
     <QRCodeCanvas
       value={JSON.stringify({
         token: "A-13",
-        farmerName: "Ramesh Kumar",
+        farmerName: user?.fullName || "Farmer",
         centre: "Green Valley Procurement Center",
         location: "Muzaffarpur, Bihar",
         date: "12 Sep 2026",
@@ -298,7 +300,7 @@ function Token() {
         </span>
 
         <span className="font-semibold text-[#183328]">
-          Ramesh Kumar
+          {user?.fullName || "Farmer"}
         </span>
       </div>
 

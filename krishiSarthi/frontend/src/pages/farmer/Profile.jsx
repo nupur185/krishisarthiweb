@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
+import { useAuth } from "../../context/AuthContext"
 import {
   ArrowLeft,
   User,
@@ -13,18 +14,19 @@ import {
 
 export default function Profile() {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const [editing, setEditing] = useState(false)
 
   const [profile, setProfile] = useState({
-    name: "Ramesh Kumar",
-    mobile: "9876543210",
+    name: user?.fullName || "Farmer",
+    mobile: user?.mobile || "",
     farmerId: "FRM-BR-2026-01452",
     village: "Kanti",
     district: "Muzaffarpur",
     state: "Bihar",
     crop: "Paddy",
-    emailId: "ramesh@gmail.com",
+    emailId: user?.email || "",
     expectedProduction: "40 Q",
     Area: "2 Acres",
   })

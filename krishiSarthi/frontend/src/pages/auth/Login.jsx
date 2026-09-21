@@ -2,9 +2,11 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 import { Link } from "react-router"
 import { api } from "../../api/api"
+import { useAuth } from "../../context/AuthContext"
 
 function Login() {
   const navigate = useNavigate()
+  const { loginUser } = useAuth()
 
   const [role, setRole] = useState("Farmer")
   const [emailOrMobile, setEmailOrMobile] = useState("")
@@ -28,6 +30,7 @@ const handleLogin = async (e) => {
     })
 
     console.log("Login successful:", data)
+    loginUser(data.user)
 
     // Navigate according to role
     if (role === "Farmer") {
