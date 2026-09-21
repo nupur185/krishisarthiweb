@@ -9,10 +9,11 @@ export const register = async (req, res) => {
       mobile,
       email,
       password,
+      role,
       
     } = req.body
 
-    if (!fullName || !mobile || !email || !password) {
+    if (!fullName || !mobile || !email || !password || !role) {
       return res.status(400).json({
         message: "All fields are required",
       })
@@ -54,7 +55,7 @@ export const register = async (req, res) => {
         mobile,
         email,
         passwordHash,
-        "farmer",
+        role.toLowerCase(),
       ]
     )
 

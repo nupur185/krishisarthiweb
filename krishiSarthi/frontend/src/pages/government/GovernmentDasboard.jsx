@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router"
 import {
   LayoutDashboard,
   Map,
@@ -159,11 +160,30 @@ export default function GovernmentDashboard() {
               active
             />
             <SidebarItem icon={Map} label="Procurement Centres" />
-            <SidebarItem icon={Users} label="Farmers" />
-            <SidebarItem icon={Package} label="Procurement" />
-            <SidebarItem icon={IndianRupee} label="Payments" />
-            <SidebarItem icon={TrendingUp} label="Analytics & Reports" />
-            <SidebarItem icon={AlertTriangle} label="Alerts" />
+            <Link
+              to="/government/farmers"
+              className="font-semibold text-[#174d35] hover:underline"
+            >
+            <SidebarItem icon={Users} label="Farmers" /> </Link>
+            <Link
+              to="/government/procurement"
+              className="font-semibold text-[#174d35] hover:underline"
+            ><SidebarItem icon={Package} label="Procurement" /> </Link>
+            <Link
+              to="/government/payments"
+              className="font-semibold text-[#174d35] hover:underline"
+            >
+            <SidebarItem icon={IndianRupee} label="Payments" /> </Link>
+            <Link
+              to="/government/analytics"
+              className="font-semibold text-[#174d35] hover:underline"
+            >
+            <SidebarItem icon={TrendingUp} label="Analytics & Reports" /> </Link>
+            <Link
+              to="/government/alerts"
+              className="font-semibold text-[#174d35] hover:underline"
+            >
+            <SidebarItem icon={AlertTriangle} label="Alerts" /> </Link>
             <SidebarItem icon={Bell} label="Notifications" />
             <SidebarItem icon={Settings} label="Settings" />
           </nav>

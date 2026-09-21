@@ -134,15 +134,23 @@ export default function ProcurementDashboard() {
             Dashboard
           </Link>
 
-          <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/75 hover:bg-white/10">
+          <Link
+              to="/officer/procurement/farmers"
+              className="font-semibold text-[#174d35] hover:underline"
+            ><button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/75 hover:bg-white/10">
             <Users size={18} />
             Farmers
           </button>
+          </Link>
 
+<Link
+              to="/officer/procurement/bookings"
+              className="font-semibold text-[#174d35] hover:underline"
+            >
           <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/75 hover:bg-white/10">
             <CalendarCheck size={18} />
             Bookings
-          </button>
+          </button></Link>
 
           <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-white/75 hover:bg-white/10">
             <PackageCheck size={18} />

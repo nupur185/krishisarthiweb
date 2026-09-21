@@ -6,6 +6,7 @@ function Register() {
   const [formData, setFormData] = useState({
     fullName: "",
     mobile: "",
+    role: "Farmer",
     aadhar: "",
     village: "",
     district: "",
@@ -35,6 +36,7 @@ const handleSubmit = async (e) => {
         mobile: formData.mobile,
         email: formData.email,
         password: formData.password,
+        role: formData.role,
       }),
     })
 
@@ -111,6 +113,28 @@ const handleSubmit = async (e) => {
                 className="w-full rounded-lg border border-[#d5ddd3] px-4 py-3 outline-none transition focus:border-[#174d35]"
               />
             </div>
+
+
+            {/* Role */}
+<div>
+  <label className="mb-2 block text-sm font-medium text-[#183328]">
+    Register As
+  </label>
+
+  <select
+    name="role"
+    value={formData.role}
+    onChange={handleChange}
+    required
+    disabled
+    className="w-full rounded-lg border border-[#d5ddd3] bg-white px-4 py-3 outline-none transition focus:border-[#174d35]"
+  >
+    <option value="Farmer">Farmer</option>
+    <option value="procurement officer">Procurement Officer</option>
+    <option value="government officer">Government Officer</option>
+  </select>
+</div>
+
 
             {/* Farmer ID */}
             {/* <div>
