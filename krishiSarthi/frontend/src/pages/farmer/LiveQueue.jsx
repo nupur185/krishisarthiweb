@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
+import { jsPDF } from "jspdf"
 import {
   ArrowLeft,
   Clock3,
@@ -7,6 +8,10 @@ import {
   Radio,
   Users,
   CheckCircle2,
+  Download,
+  FileText,
+  Scale,
+  ClipboardCheck,
 } from "lucide-react"
 
 const initialQueue = [
@@ -16,13 +21,23 @@ const initialQueue = [
   { token: "A-10", status: "Waiting", stage: "Registration" },
   { token: "A-11", status: "Waiting", stage: "Registration" },
   { token: "A-12", status: "Waiting", stage: "Registration" },
-  { token: "A-13", status: "Your Turn", stage: "Waiting" },
+  { token: "A-13", status: "Waiting", stage: "Waiting" },
 ]
 
 function LiveQueue() {
   const [queue, setQueue] = useState(initialQueue)
   const [waitTime, setWaitTime] = useState(45)
 
+  // A-13 procurement workflow
+  const [a13TurnStarted, setA13TurnStarted] = useState(false)
+  const [a13Stage, setA13Stage] = useState("Waiting")
+  const [quality, setQuality] = useState("")
+  const [quantity, setQuantity] = useState("")
+  const [receiptGenerated, setReceiptGenerated] = useState(false)
+
+  /*
+   * Existing queue simulation
+   */
   useEffect(() => {
     const interval = setInterval(() => {
       setQueue((currentQueue) => {
@@ -41,9 +56,12 @@ function LiveQueue() {
         )
 
         if (nextWaitingIndex !== -1) {
+          const nextToken = updatedQueue[nextWaitingIndex].token
+
           updatedQueue[nextWaitingIndex] = {
             ...updatedQueue[nextWaitingIndex],
-            status: "Serving",
+            status:
+              nextToken === "A-13" ? "Your Turn" : "Serving",
           }
         }
 
@@ -51,14 +69,197 @@ function LiveQueue() {
       })
 
       setWaitTime((time) => Math.max(0, time - 5))
-    }, 15000)
+    }, 2000)
 
     return () => clearInterval(interval)
   }, [])
 
+  /*
+   * Detect when A-13's turn starts
+   */
+  useEffect(() => {
+    const a13 = queue.find((item) => item.token === "A-13")
+
+    if (
+      a13 &&
+      a13.status === "Your Turn" &&
+      !a13TurnStarted
+    ) {
+      setA13TurnStarted(true)
+      setA13Stage("Registration")
+    }
+  }, [queue, a13TurnStarted])
+
+  /*
+   * A-13 procurement workflow
+   *
+   * Registration
+   *      ↓ 1 sec
+   * Quality Check
+   *      ↓ 1 sec
+   * Weighment
+   *      ↓ 1 sec
+   * Receipt Generated
+   */
+  useEffect(() => {
+    if (!a13TurnStarted) return
+
+    setA13Stage("Registration")
+
+    const qualityTimer = setTimeout(() => {
+      setA13Stage("Quality Check")
+
+      const qualityResultTimer = setTimeout(() => {
+        setQuality("Grade A — Good quality crop")
+
+        setA13Stage("Weighment")
+
+        const quantityTimer = setTimeout(() => {
+          setQuantity("42.5 Quintals")
+
+          const receiptTimer = setTimeout(() => {
+            setA13Stage("Procurement Receipt Generated")
+            setReceiptGenerated(true)
+          }, 2000)
+
+          return () => clearTimeout(receiptTimer)
+        }, 2000)
+
+        return () => clearTimeout(quantityTimer)
+      }, 2000)
+
+      return () => clearTimeout(qualityResultTimer)
+    }, 2000)
+
+    return () => clearTimeout(qualityTimer)
+  }, [a13TurnStarted])
+
   const yourPosition = queue.findIndex(
     (item) => item.token === "A-13"
   )
+
+  /*
+   * Generate procurement receipt
+   */
+const downloadReceipt = () => {
+  if (!receiptGenerated) return
+
+  const doc = new jsPDF()
+
+  const receiptId = `KS-${Date.now()}`
+  const generatedAt = new Date().toLocaleString("en-IN")
+
+  // Header
+  doc.setFillColor(23, 77, 53)
+  doc.rect(0, 0, 210, 35, "F")
+
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(22)
+  doc.setFont("helvetica", "bold")
+  doc.text("KrishiSarthi", 20, 17)
+
+  doc.setFontSize(10)
+  doc.setFont("helvetica", "normal")
+  doc.text("Farmer Procurement Platform", 20, 25)
+
+  doc.setFontSize(14)
+  doc.setFont("helvetica", "bold")
+  doc.text("PROCUREMENT RECEIPT", 130, 20)
+
+  // Reset text color
+  doc.setTextColor(24, 51, 40)
+
+  // Receipt information
+  doc.setFontSize(10)
+  doc.setFont("helvetica", "normal")
+  doc.text(`Receipt ID: ${receiptId}`, 20, 48)
+  doc.text(`Generated: ${generatedAt}`, 20, 55)
+
+  // Centre section
+  doc.setFontSize(13)
+  doc.setFont("helvetica", "bold")
+  doc.text("Procurement Centre", 20, 72)
+
+  doc.setFontSize(10)
+  doc.setFont("helvetica", "normal")
+  doc.text("Green Valley Procurement Center", 20, 81)
+  doc.text("Muzaffarpur, Bihar", 20, 88)
+
+  // Farmer / token section
+  doc.setFontSize(13)
+  doc.setFont("helvetica", "bold")
+  doc.text("Procurement Details", 20, 108)
+
+  doc.setFontSize(10)
+  doc.setFont("helvetica", "normal")
+
+  doc.text("Token Number", 20, 119)
+  doc.text("A-13", 80, 119)
+
+  doc.text("Farmer", 20, 128)
+  doc.text("Registered Farmer", 80, 128)
+
+  doc.text("Crop Quality", 20, 137)
+  doc.text(quality || "Not available", 80, 137)
+
+  doc.text("Quantity Procured", 20, 146)
+  doc.text(quantity || "Not available", 80, 146)
+
+  doc.text("Payment Amount", 20, 155)
+doc.setFont("helvetica", "bold")
+doc.text("Rs. 18,560", 80, 155)
+
+doc.text("Procurement Status", 20, 164)
+doc.setFont("helvetica", "bold")
+doc.text("Successfully Completed", 80, 164)
+
+
+  // Divider
+  doc.setDrawColor(210, 220, 211)
+  doc.line(20, 174, 190, 174)
+
+  // Completion message
+  doc.setFontSize(12)
+  doc.setFont("helvetica", "bold")
+  doc.setTextColor(23, 77, 53)
+  doc.text("Procurement Completed Successfully", 20, 189)
+
+  doc.setFontSize(9)
+  doc.setFont("helvetica", "normal")
+  doc.setTextColor(100, 110, 105)
+
+  doc.text(
+    "This is a system-generated procurement receipt.",
+    20,
+    190
+  )
+
+  doc.text(
+    "Please retain this receipt for your records.",
+    20,
+    197
+  )
+
+  // Footer
+  doc.setDrawColor(210, 220, 211)
+  doc.line(20, 270, 190, 270)
+
+  doc.setFontSize(8)
+  doc.text(
+    "KrishiSarthi — Smart Farmer Procurement Platform",
+    20,
+    280
+  )
+
+  doc.text(
+    "Digital Receipt",
+    160,
+    280
+  )
+
+  // Download PDF
+  doc.save(`KrishiSarthi-Procurement-Receipt-A13.pdf`)
+}
 
   return (
     <div className="min-h-screen bg-[#f7f4ea]">
@@ -240,32 +441,160 @@ function LiveQueue() {
               return (
                 <div
                   key={item.token}
-                  className={`flex items-center justify-between rounded-xl border p-4 ${
+                  className={`rounded-xl border p-4 ${
                     isYourToken
                       ? "border-[#174d35] bg-[#eff8ed]"
                       : "border-[#d5ddd3] bg-white"
                   }`}
                 >
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between">
 
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f7f4ea] text-xs font-semibold text-[#183328]">
-                      {index + 1}
-                    </span>
+                    <div className="flex items-center gap-3">
 
-                    <div>
-                      <p className="text-sm font-semibold text-[#183328]">
-                        {item.token}
-                      </p>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f7f4ea] text-xs font-semibold text-[#183328]">
+                        {index + 1}
+                      </span>
 
-                      <p className="mt-0.5 text-xs text-[#6b776f]">
-                        {item.stage}
-                      </p>
+                      <div>
+                        <p className="text-sm font-semibold text-[#183328]">
+                          {item.token}
+                        </p>
+
+                        <p className="mt-0.5 text-xs text-[#6b776f]">
+                          {isYourToken && a13TurnStarted
+                            ? a13Stage
+                            : item.stage}
+                        </p>
+                      </div>
+
                     </div>
+
+                    <StatusBadge
+                      status={
+                        isYourToken && a13TurnStarted
+                          ? "Your Turn"
+                          : item.status
+                      }
+                    />
 
                   </div>
 
-                  <StatusBadge status={item.status} />
+                  {/* A-13 live procurement details */}
+                  {isYourToken && a13TurnStarted && (
+                    <div className="mt-4 border-t border-[#cfe0d0] pt-4">
+
+                      <div className="grid gap-3 sm:grid-cols-2">
+
+                        {/* Quality */}
+                        <div className="rounded-xl border border-[#d5ddd3] bg-white p-3">
+
+                          <div className="flex items-center gap-2">
+
+                            <ClipboardCheck
+                              size={17}
+                              className="text-[#174d35]"
+                            />
+
+                            <p className="text-xs font-semibold text-[#183328]">
+                              Crop Quality
+                            </p>
+
+                          </div>
+
+                          <p className="mt-2 text-sm font-medium text-[#174d35]">
+                            {quality || "Checking crop quality..."}
+                          </p>
+
+                        </div>
+
+                        {/* Quantity */}
+                        <div className="rounded-xl border border-[#d5ddd3] bg-white p-3">
+
+                          <div className="flex items-center gap-2">
+
+                            <Scale
+                              size={17}
+                              className="text-[#174d35]"
+                            />
+
+                            <p className="text-xs font-semibold text-[#183328]">
+                              Quantity
+                            </p>
+
+                          </div>
+
+                          <p className="mt-2 text-sm font-medium text-[#174d35]">
+                            {quantity || "Waiting for weighment..."}
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                      {/* Receipt status */}
+                      <div
+                        className={`mt-3 rounded-xl border p-3 ${
+                          receiptGenerated
+                            ? "border-[#b8d9bb] bg-[#eff8ed]"
+                            : "border-[#d5ddd3] bg-[#f7f4ea]"
+                        }`}
+                      >
+
+                        <div className="flex items-center gap-2">
+
+                          {receiptGenerated ? (
+                            <CheckCircle2
+                              size={18}
+                              className="text-[#5eaf68]"
+                            />
+                          ) : (
+                            <FileText
+                              size={18}
+                              className="text-[#6b776f]"
+                            />
+                          )}
+
+                          <div>
+
+                            <p className="text-sm font-semibold text-[#183328]">
+                              {receiptGenerated
+                                ? "Procurement Receipt Generated"
+                                : "Procurement Receipt"}
+                            </p>
+
+                            <p className="mt-0.5 text-xs text-[#6b776f]">
+                              {receiptGenerated
+                                ? "Your procurement process is complete."
+                                : "Receipt will be available after procurement is completed."}
+                            </p>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      {/* Download */}
+                      <button
+                        type="button"
+                        onClick={downloadReceipt}
+                        disabled={!receiptGenerated}
+                        className={`mt-3 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
+                          receiptGenerated
+                            ? "bg-[#174d35] text-white hover:bg-[#123c2a]"
+                            : "cursor-not-allowed bg-[#e4e7e2] text-[#9aa29b]"
+                        }`}
+                      >
+                        <Download size={17} />
+
+                        {receiptGenerated
+                          ? "Download Procurement Receipt"
+                          : "Receipt Not Generated"}
+                      </button>
+
+                    </div>
+                  )}
 
                 </div>
               )
@@ -358,9 +687,7 @@ function StatusBadge({ status }) {
 
   if (status === "Your Turn") {
     return (
-      <span className="rounded-full bg-[#dde
-
-f9] px-3 py-1 text-xs font-semibold text-[#174d35]">
+      <span className="rounded-full bg-[#dde5dc] px-3 py-1 text-xs font-semibold text-[#174d35]">
         Your Turn
       </span>
     )

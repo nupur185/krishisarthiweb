@@ -35,7 +35,7 @@ const paymentData = {
   mspRate: "₹5.80 / kg",
   bankRef: "SBIN12345678",
   centerName: "PACS Centre 042, Karnal",
-  timeline: [
+timeline: [
   {
     id: 1,
     title: "Payment Maker",
@@ -51,25 +51,25 @@ const paymentData = {
   {
     id: 3,
     title: "Disbursement Bank Clearance",
-    status: "completed",
+    status: "current",
     description: "Payment sent for bank-side processing",
   },
   {
     id: 4,
     title: "Cheque Handover",
-    status: "completed",
+    status: "pending",
     description: "Payment advice/instrument handed over",
   },
   {
     id: 5,
     title: "Initiate Payment",
-    status: "completed",
+    status: "pending",
     description: "Payment is being transferred to your bank",
   },
   {
     id: 6,
     title: "Fully Disbursed",
-    status: "completed",
+    status: "pending",
     description: "Money credited to your account",
   },
 ],
@@ -225,9 +225,23 @@ export default function PaymentAndUpdates() {
       {paymentData.timeline.map((item) => (
         <div key={item.id} className="relative">
           {/* Step Circle */}
-          <div className="absolute -left-8 top-0.5 h-6 w-6 rounded-full bg-[#14532D] border-4 border-white shadow-sm flex items-center justify-center">
-            <CheckCircle2 size={12} className="text-white" />
-          </div>
+          <div
+  className={`absolute -left-8 top-0.5 h-6 w-6 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${
+    item.status === "completed"
+      ? "bg-[#14532D]"
+      : item.status === "current"
+      ? "bg-[#B76537]"
+      : "bg-white border-gray-300"
+  }`}
+>
+  {item.status === "completed" && (
+    <CheckCircle2 size={12} className="text-white" />
+  )}
+
+  {item.status === "current" && (
+    <span className="h-2 w-2 rounded-full bg-white" />
+  )}
+</div>
 
           {/* Step Content */}
           <div>
@@ -312,10 +326,23 @@ export default function PaymentAndUpdates() {
       {paymentData.timeline.map((item) => (
         <div key={item.id} className="relative">
           {/* Step Circle */}
-          <div className="absolute -left-7 top-0 h-5 w-5 rounded-full bg-[#14532D] border-2 border-white shadow-sm flex items-center justify-center">
-            <CheckCircle2 size={10} className="text-white" />
-          </div>
+          <div
+  className={`absolute -left-7 top-0 h-5 w-5 rounded-full border-2 border-white shadow-sm flex items-center justify-center ${
+    item.status === "completed"
+      ? "bg-[#14532D]"
+      : item.status === "current"
+      ? "bg-[#B76537]"
+      : "bg-white border-gray-300"
+  }`}
+>
+  {item.status === "completed" && (
+    <CheckCircle2 size={10} className="text-white" />
+  )}
 
+  {item.status === "current" && (
+    <span className="h-1.5 w-1.5 rounded-full bg-white" />
+  )}
+</div>
           {/* Step Content */}
           <div>
             <h5 className="text-sm font-bold text-gray-900 leading-tight">
