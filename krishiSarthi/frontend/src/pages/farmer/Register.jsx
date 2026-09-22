@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { Link } from "react-router"
 import { api } from "../../api/api"
+import { useNavigate } from "react-router"
 
 function Register() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     fullName: "",
     mobile: "",
@@ -42,6 +44,7 @@ const handleSubmit = async (e) => {
 
     alert("Registration successful!")
     console.log("Registered user:", data.user)
+    navigate("/login");
 
   } catch (error) {
     console.error("Registration error:", error)
