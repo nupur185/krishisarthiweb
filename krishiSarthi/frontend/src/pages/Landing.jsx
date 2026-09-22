@@ -191,68 +191,70 @@ function Landing() {
       </section>
 
       {/* Features */}
-      <section id="features" className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold text-[#b76537]">
-              PLATFORM FEATURES
+      {/* Features */}
+<section id="features" className="bg-white py-20">
+  <div className="mx-auto max-w-7xl px-5 md:px-8">
+    <div className="mx-auto max-w-2xl text-center">
+      <p className="text-sm font-semibold text-[#b76537]">
+        PLATFORM FEATURES
+      </p>
+
+      <h2 className="mt-2 text-3xl font-bold text-[#123c2a] md:text-4xl">
+        Everything in one place
+      </h2>
+
+      <p className="mt-4 text-sm leading-6 text-[#6b776f]">
+        From booking a slot to receiving payment, every important
+        step is visible to the farmer.
+      </p>
+    </div>
+
+    <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {[
+        {
+          icon: CalendarCheck,
+          title: "Smart Slot Booking",
+          text: "Choose procurement centres and suitable arrival windows.",
+        },
+        {
+          icon: Clock3,
+          title: "Live Queue",
+          text: "Track your queue position and estimated waiting time.",
+        },
+        {
+          icon: Bell,
+          title: "Smart Notifications",
+          text: "Receive timely updates about slots, queues and payments.",
+        },
+        {
+          icon: BarChart3,
+          title: "Transparent Status",
+          text: "Monitor procurement and payment progress from one dashboard.",
+        },
+      ].map((feature) => {
+        const Icon = feature.icon
+
+        return (
+          <Link
+            key={feature.title}
+            to="/register"
+            className="rounded-2xl border border-[#d5ddd3] bg-[#f7f4ea] p-6"
+          >
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#ddefd9] text-[#174d35]">
+              <Icon size={21} />
+            </div>
+
+            <h3 className="mt-5 font-semibold">{feature.title}</h3>
+
+            <p className="mt-2 text-sm leading-6 text-[#6b776f]">
+              {feature.text}
             </p>
-
-            <h2 className="mt-2 text-3xl font-bold text-[#123c2a] md:text-4xl">
-              Everything in one place
-            </h2>
-
-            <p className="mt-4 text-sm leading-6 text-[#6b776f]">
-              From booking a slot to receiving payment, every important
-              step is visible to the farmer.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                icon: CalendarCheck,
-                title: "Smart Slot Booking",
-                text: "Choose procurement centres and suitable arrival windows.",
-              },
-              {
-                icon: Clock3,
-                title: "Live Queue",
-                text: "Track your queue position and estimated waiting time.",
-              },
-              {
-                icon: Bell,
-                title: "Smart Notifications",
-                text: "Receive timely updates about slots, queues and payments.",
-              },
-              {
-                icon: BarChart3,
-                title: "Transparent Status",
-                text: "Monitor procurement and payment progress from one dashboard.",
-              },
-            ].map((feature) => {
-              const Icon = feature.icon
-
-              return (
-                <div
-                  key={feature.title}
-                  className="rounded-2xl border border-[#d5ddd3] bg-[#f7f4ea] p-6"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#ddefd9] text-[#174d35]">
-                    <Icon size={21} />
-                  </div>
-
-                  <h3 className="mt-5 font-semibold">{feature.title}</h3>
-
-                  <p className="mt-2 text-sm leading-6 text-[#6b776f]">
-                    {feature.text}
-                  </p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+          </Link>
+        )
+      })}
+    </div>
+  </div>
+</section>
 
       {/* How it works */}
       <section id="how-it-works" className="py-20">
