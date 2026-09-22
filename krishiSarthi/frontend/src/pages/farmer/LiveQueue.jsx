@@ -102,7 +102,7 @@ function LiveQueue() {
       }) 
  
       setWaitTime((time) => Math.max(0, time - 5)) 
-    }, 2000) 
+    }, 1000) 
  
     return () => clearInterval(interval) 
   }, []) 
@@ -153,16 +153,16 @@ function LiveQueue() {
           const receiptTimer = setTimeout(() => { 
             setA13Stage("Procurement Receipt Generated") 
             setReceiptGenerated(true) 
-          }, 2000) 
+          }, 1000) 
  
           return () => clearTimeout(receiptTimer) 
-        }, 2000) 
+        }, 1000) 
  
         return () => clearTimeout(quantityTimer) 
-      }, 2000) 
+      }, 1000) 
  
       return () => clearTimeout(qualityResultTimer) 
-    }, 2000) 
+    }, 1000) 
  
     return () => clearTimeout(qualityTimer) 
   }, [a13TurnStarted]) 
