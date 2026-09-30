@@ -11,6 +11,7 @@ function Login() {
   const [role, setRole] = useState("Farmer")
   const [emailOrMobile, setEmailOrMobile] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
   // Demo credentials popup
   const [showDemoPopup, setShowDemoPopup] = useState(false)
@@ -54,42 +55,46 @@ function Login() {
   }
 
   const handleLogin = async (e) => {
-    e.preventDefault()
+  e.preventDefault()
 
-    console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL)
+  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL)
 
-    if (!role || !emailOrMobile.trim() || !password.trim()) {
-      return
-    }
-
-    try {
-      const data = await api("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({
-          emailOrMobile: emailOrMobile.trim(),
-          password,
-          role,
-        }),
-      })
-
-      console.log("Login successful:", data)
-
-      loginUser(data.user)
-
-      // Navigate according to role
-      if (role === "Farmer") {
-        navigate("/farmer/home")
-      } else if (role === "Procurement Officer") {
-        navigate("/officer/procurement")
-      } else if (role === "Government Officer") {
-        navigate("/government/dashboard")
-      }
-
-    } catch (error) {
-      console.error("Login error:", error)
-      alert(error.message)
-    }
+  if (!role || !emailOrMobile.trim() || !password.trim()) {
+    return
   }
+
+  setLoading(true)
+
+  try {
+    const data = await api("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({
+        emailOrMobile: emailOrMobile.trim(),
+        password,
+        role,
+      }),
+    })
+
+    console.log("Login successful:", data)
+
+    loginUser(data.user)
+
+    // Navigate according to role
+    if (role === "Farmer") {
+      navigate("/farmer/home")
+    } else if (role === "Procurement Officer") {
+      navigate("/officer/procurement")
+    } else if (role === "Government Officer") {
+      navigate("/government/dashboard")
+    }
+
+  } catch (error) {
+    console.error("Login error:", error)
+    alert(error.message)
+  } finally {
+    setLoading(false)
+  }
+}
 
   return (
     <div className="min-h-screen bg-[#f7f4ea] flex items-center justify-center px-4">
@@ -172,11 +177,23 @@ function Login() {
 
         {/* Login */}
         <button
-          type="submit"
-          className="w-full rounded-lg bg-[#174d35] py-3 font-medium text-white transition hover:bg-[#123c2a]"
-        >
-          Login
-        </button>
+  type="submit"
+  disabled={loading}
+  className={`w-full rounded-lg py-3 font-medium text-white transition ${
+    loading
+      ? "bg-[#6b776f] cursor-not-allowed"
+      : "bg-[#174d35] hover:bg-[#123c2a]"
+  }`}
+>
+  {loading ? (
+    <span className="flex items-center justify-center gap-2">
+      <span className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
+      Logging in...
+    </span>
+  ) : (
+    "Login"
+  )}
+</button>
 
         <p className="mt-6 text-center text-sm text-[#6b776f]">
           Don't have an account?{" "}
