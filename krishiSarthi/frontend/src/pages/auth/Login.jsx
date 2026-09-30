@@ -11,48 +11,93 @@ function Login() {
   const [role, setRole] = useState("Farmer")
   const [emailOrMobile, setEmailOrMobile] = useState("")
   const [password, setPassword] = useState("")
-const handleLogin = async (e) => {
-  e.preventDefault()
 
-  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL)
-  if (!role || !emailOrMobile.trim() || !password.trim()) {
-    return
+  // Demo credentials popup
+  const [showDemoPopup, setShowDemoPopup] = useState(false)
+  const [demoCredentials, setDemoCredentials] = useState(null)
+
+  const handleRoleChange = (e) => {
+    const selectedRole = e.target.value
+    setRole(selectedRole)
+
+    if (selectedRole === "Procurement Officer") {
+      setDemoCredentials({
+        role: "Procurement Officer",
+        email: "officer1@gmail.com",
+        password: "officer1@123",
+      })
+      setShowDemoPopup(true)
+    } else if (selectedRole === "Government Officer") {
+      setDemoCredentials({
+        role: "Government Officer",
+        email: "gov@gmail.com",
+        password: "gov@123",
+      })
+      setShowDemoPopup(true)
+    } else {
+      setShowDemoPopup(false)
+      setDemoCredentials(null)
+    }
   }
 
-  try {
-    const data = await api("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({
-        emailOrMobile: emailOrMobile.trim(),
-        password,
-        role,
-      }),
-    })
+  const handleUseDemoCredentials = () => {
+    if (!demoCredentials) return
 
-    console.log("Login successful:", data)
-    loginUser(data.user)
+    setEmailOrMobile(demoCredentials.email)
+    setPassword(demoCredentials.password)
+    setShowDemoPopup(false)
+  }
 
-    // Navigate according to role
-    if (role === "Farmer") {
-      navigate("/farmer/home")
-    } else if (role === "Procurement Officer") {
-      navigate("/officer/procurement")
-    } else if (role === "Government Officer") {
-      navigate("/government/dashboard")
+  const handleCancelDemo = () => {
+    setShowDemoPopup(false)
+    setDemoCredentials(null)
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+
+    console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL)
+
+    if (!role || !emailOrMobile.trim() || !password.trim()) {
+      return
     }
 
-  } catch (error) {
-    console.error("Login error:", error)
-    alert(error.message)
+    try {
+      const data = await api("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          emailOrMobile: emailOrMobile.trim(),
+          password,
+          role,
+        }),
+      })
+
+      console.log("Login successful:", data)
+
+      loginUser(data.user)
+
+      // Navigate according to role
+      if (role === "Farmer") {
+        navigate("/farmer/home")
+      } else if (role === "Procurement Officer") {
+        navigate("/officer/procurement")
+      } else if (role === "Government Officer") {
+        navigate("/government/dashboard")
+      }
+
+    } catch (error) {
+      console.error("Login error:", error)
+      alert(error.message)
+    }
   }
-}
 
   return (
     <div className="min-h-screen bg-[#f7f4ea] flex items-center justify-center px-4">
+
       <form
-  onSubmit={handleLogin}
-  className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm border border-[#d5ddd3]"
->
+        onSubmit={handleLogin}
+        className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm border border-[#d5ddd3]"
+      >
 
         {/* Logo */}
         <div className="text-center mb-8">
@@ -84,7 +129,7 @@ const handleLogin = async (e) => {
 
           <select
             value={role}
-            onChange={(e) => setRole(e.target.value)}
+            onChange={handleRoleChange}
             className="w-full rounded-lg border border-[#d5ddd3] bg-white px-4 py-3 outline-none focus:border-[#174d35]"
           >
             <option>Farmer</option>
@@ -127,26 +172,105 @@ const handleLogin = async (e) => {
 
         {/* Login */}
         <button
-  type="submit"
+          type="submit"
           className="w-full rounded-lg bg-[#174d35] py-3 font-medium text-white transition hover:bg-[#123c2a]"
         >
           Login
         </button>
 
-
         <p className="mt-6 text-center text-sm text-[#6b776f]">
-            Don't have an account?{" "}
-            <Link
-              to="/register"
-              className="font-semibold text-[#174d35] hover:underline"
-            >
-              Register
-            </Link>
-          </p>
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="font-semibold text-[#174d35] hover:underline"
+          >
+            Register
+          </Link>
+        </p>
 
-      
-    </form>
+      </form>
 
+      {/* ================= DEMO CREDENTIALS POPUP ================= */}
+      {showDemoPopup && demoCredentials && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+
+          <div className="w-full max-w-md rounded-2xl bg-white shadow-xl border border-[#d5ddd3] overflow-hidden">
+
+            {/* Popup Header */}
+            <div className="bg-[#174d35] px-6 py-5 text-white">
+              <h2 className="text-xl font-bold">
+                Demo Access
+              </h2>
+
+              <p className="mt-1 text-sm text-white/80">
+                {demoCredentials.role}
+              </p>
+            </div>
+
+            {/* Popup Content */}
+            <div className="p-6">
+
+              <div className="rounded-xl bg-[#eff8ed] border border-[#d5ddd3] p-4 mb-5">
+                <p className="text-sm leading-6 text-[#183328]">
+                  This is a <strong>demo website</strong>.
+                  <br />
+                  To view the{" "}
+                  <strong>{demoCredentials.role} Dashboard</strong>,
+                  please use the demo credentials below.
+                </p>
+              </div>
+
+              {/* Email */}
+              <div className="mb-4">
+                <p className="text-xs font-medium text-[#6b776f] mb-1">
+                  Email
+                </p>
+
+                <div className="flex items-center justify-between rounded-lg border border-[#d5ddd3] bg-[#f7f4ea] px-4 py-3">
+                  <span className="text-sm font-medium text-[#183328]">
+                    {demoCredentials.email}
+                  </span>
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="mb-6">
+                <p className="text-xs font-medium text-[#6b776f] mb-1">
+                  Password
+                </p>
+
+                <div className="flex items-center justify-between rounded-lg border border-[#d5ddd3] bg-[#f7f4ea] px-4 py-3">
+                  <span className="text-sm font-medium text-[#183328]">
+                    {demoCredentials.password}
+                  </span>
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+
+                <button
+                  type="button"
+                  onClick={handleCancelDemo}
+                  className="flex-1 rounded-lg border border-[#d5ddd3] bg-white py-3 font-medium text-[#183328] transition hover:bg-[#f7f4ea]"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleUseDemoCredentials}
+                  className="flex-1 rounded-lg bg-[#174d35] py-3 font-medium text-white transition hover:bg-[#123c2a]"
+                >
+                  Enter Credentials
+                </button>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )
